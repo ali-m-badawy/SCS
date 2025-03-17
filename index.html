@@ -6,14 +6,12 @@
     <title>SCS</title>
     <style>
         :root {
-            --bg-color: #f5f5dc;
-            --bg-gradient: linear-gradient(135deg, #f8f1e4, #f5e6cc);
-            --btn-bg: linear-gradient(45deg, #d2b48c, #c2a383); /* بيج بدرجات متناغمة */
-            --text-color: black;
+            --bg-color: #000000;
+            --btn-bg: linear-gradient(45deg, #d2b48c, #c2a383); /* بيج */
+            --text-color: white;
         }
         .light-mode {
-            --bg-color: #ffffff;
-            --bg-gradient: linear-gradient(135deg, #faf3e0, #fff5e1);
+            --bg-color: #f5f5dc;
             --btn-bg: linear-gradient(45deg, #e0c3a3, #d1b090);
             --text-color: black;
         }
@@ -22,26 +20,21 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: var(--bg-gradient);
-            background-size: 400% 400%;
-            animation: animatedBG 8s infinite alternate;
+            background-color: var(--bg-color);
             flex-direction: column;
             font-family: 'Arial', sans-serif;
             color: var(--text-color);
-            transition: background 0.5s ease;
+            overflow: hidden;
+            margin: 0;
+            position: relative;
         }
-        @keyframes animatedBG {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 100% 100%; }
-        }
-        .news-container {
-            background: rgba(255, 255, 255, 0.5);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-            width: 80%;
-            max-width: 600px;
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
         .btn {
             padding: 15px 30px;
@@ -56,13 +49,7 @@
         }
         .btn:hover {
             transform: scale(1.1);
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-        }
-        .container {
-            display: none;
-            margin-top: 20px;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            box-shadow: 0px 4px 15px rgba(255, 255, 255, 0.5);
         }
         .toggle-mode {
             position: absolute;
@@ -89,44 +76,66 @@
         .light-mode .toggle-circle {
             transform: translateX(25px);
         }
-        .help-container {
-            margin-top: 50px;
-        }
     </style>
-    <script>
-        function showButtons() {
-            document.getElementById('buttons-container').style.display = 'grid';
-        }
-        function toggleMode() {
-            document.body.classList.toggle('light-mode');
-        }
-    </script>
 </head>
 <body>
+    <canvas id="particleCanvas"></canvas>
+
     <button class="toggle-mode" onclick="toggleMode()">
         🌙 <div class="toggle-circle"></div> ☀️
     </button>
-    
-    <div class="news-container">
-        <h2>آخر الأخبار</h2>
-        <p>تم تحديث المواد الدراسية وإضافة مراجع جديدة.</p>
-    </div>
-    
-    <button class="btn main-btn" onclick="showButtons()">SCS Semester 6</button>
-    
-    <div class="container" id="buttons-container">
-        <button class="btn" onclick="window.location.href='https://drive.google.com/drive/folders/1iRcVaGsgYY2QhigPp27Bn3Fak3GLNngd?usp=drive_link'">نظم التشغيل</button>
-        <button class="btn" onclick="window.location.href='https://drive.google.com/drive/folders/1iOZaMQK5wfi-MHwcMddFyeQIxw9Hbp_W'">برمجة هيكلية</button>
-        <button class="btn" onclick="window.location.href='https://drive.google.com/drive/folders/1iMeV6WfvH8wWXfLqjGjWKxOxleMmjoj8?usp=drive_link'">مواضيع مختارة من الحاسب</button>
-        <button class="btn" onclick="window.location.href='https://drive.google.com/drive/folders/1iTZoev1FLXpLTXgLYosQYgvxon1lwepy?usp=drive_link'">ذكاء اصطناعي</button>
-        <button class="btn" onclick="window.location.href='https://drive.google.com/drive/folders/1iTSre33goy2xd2LnrAOCaxv4EYyfGBo7?usp=drive_link'">اختبارات فروض</button>
-        <button class="btn" onclick="window.location.href='https://drive.google.com/drive/folders/1iWNj4Ta-g9lqbN_KvgE_58apO3cCKn8T?usp=drive_link'">نظرية التقديرات</button>
-        <button class="btn" onclick="window.location.href='https://drive.google.com/drive/folders/1iZMaILXqZx1gyws-7EKxgdEIFFcw_Q65?usp=drive_link'">الدوال والدوال الخاصة</button>
-    </div>
-    
-    <div class="help-container">
-        <button class="btn" onclick="window.location.href='https://forms.gle/DDrXWiVJXBqMLpgH7'">ساعدنا</button>
-    </div>
 
+    <button class="btn">SCS Semester 6</button>
+
+    <script>
+        function toggleMode() {
+            document.body.classList.toggle('light-mode');
+        }
+
+        const canvas = document.getElementById("particleCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let particles = [];
+        const numParticles = 50;
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            particles = [];
+            for (let i = 0; i < numParticles; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 4 + 1,
+                    dx: (Math.random() - 0.5) * 2,
+                    dy: (Math.random() - 0.5) * 2,
+                });
+            }
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+
+            particles.forEach((p) => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                p.x += p.dx;
+                p.y += p.dy;
+
+                if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+            });
+
+            requestAnimationFrame(drawParticles);
+        }
+
+        window.addEventListener("resize", init);
+        init();
+        drawParticles();
+    </script>
 </body>
 </html>
