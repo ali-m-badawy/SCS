@@ -24,11 +24,11 @@
             margin: 0;
             position: relative;
             overflow: hidden;
+            text-align: center;
         }
         .welcome {
             font-size: 28px;
             font-weight: bold;
-            text-align: center;
             margin-bottom: 20px;
             animation: fadeIn 2s ease-in-out;
         }
@@ -37,7 +37,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .content {
-            text-align: center;
             max-width: 600px;
             margin-bottom: 20px;
         }
@@ -46,6 +45,7 @@
             flex-wrap: wrap;
             gap: 15px;
             justify-content: center;
+            padding: 10px;
         }
         .card {
             background: rgba(255, 255, 255, 0.1);
@@ -70,6 +70,7 @@
             padding-top: 60px;
             transition: left 0.5s ease-in-out;
             box-shadow: 5px 0 15px rgba(255, 215, 0, 0.5);
+            z-index: 1000;
         }
         .sidebar a {
             padding: 12px 20px;
@@ -95,13 +96,13 @@
             border-radius: 5px;
             cursor: pointer;
             transition: transform 0.3s ease;
+            z-index: 1100;
         }
         .toggle-btn:hover {
             transform: rotate(90deg);
         }
         .help-section {
             margin-top: 30px;
-            text-align: center;
         }
         .help-btn {
             background: var(--btn-bg);
@@ -116,30 +117,30 @@
         .help-btn:hover {
             transform: scale(1.1);
         }
+        @media (max-width: 768px) {
+            body {
+                height: auto;
+                padding: 20px;
+            }
+            .cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            .card {
+                width: 90%;
+            }
+            .toggle-btn {
+                left: 5px;
+                top: 10px;
+            }
+        }
     </style>
 </head>
 <body>
     <script>
-        function toggleMode() {
-            document.body.classList.toggle('light-mode');
-            const mode = document.body.classList.contains('light-mode') ? 'light' : 'dark';
-            localStorage.setItem('mode', mode);
-        }
-        
         function toggleSidebar() {
-        var sidebar = document.getElementById("sidebar");
-        if (sidebar.classList.contains("open-sidebar")) {
-            sidebar.classList.remove("open-sidebar");
-        } else {
-            sidebar.classList.add("open-sidebar");
-        }
-        }
-
-        window.onload = function() {
-            const savedMode = localStorage.getItem('mode');
-            if (savedMode === 'light') {
-                document.body.classList.add('light-mode');
-            }
+            var sidebar = document.getElementById("sidebar");
+            sidebar.classList.toggle("open-sidebar");
         }
     </script>
     <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
@@ -166,7 +167,7 @@
     </div>
     <div class="help-section">
         <p>والله في عون العبد ما كان العبد في عون أخيه</p>
-        <button class="help-btn">ساعدنا</button>
+        <button class="help-btn" onclick="window.location.href='https://forms.gle/DDrXWiVJXBqMLpgH7'">ساعدنا</button>
     </div>
 </body>
 </html>
