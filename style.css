@@ -1,0 +1,217 @@
+/* 🎨 إعداد الألوان والمتغيرات */
+:root {
+    --bg-color: #000000;
+    --btn-bg: linear-gradient(45deg, #d2b48c, #c2a383);
+    --text-color: white;
+    --gold-color: #FFD700;
+    --sidebar-width: 250px;
+}
+
+/* 🧱 تنسيق عام للصفحة */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    font-family: 'Arial', sans-serif;
+    color: var(--text-color);
+    margin: 0;
+    position: relative;
+    overflow-x: hidden;
+    text-align: center;
+    transition: margin 0.5s ease-in-out, opacity 0.5s ease;
+    opacity: 0;
+}
+
+body.sidebar-open {
+    margin-right: var(--sidebar-width);
+}
+
+/* ✨ عند تحميل الصفحة */
+body.loaded {
+    opacity: 1;
+}
+
+/* 🏷 العنوان الترحيبي */
+.welcome {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 📄 النصوص */
+.content {
+    max-width: 600px;
+    margin-bottom: 20px;
+    padding: 0 20px;
+    line-height: 1.8;
+    font-size: 16px;
+}
+
+/* 🗂 البطاقات */
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    padding: 10px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    width: 150px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 4px 15px rgba(255, 215, 0, 0.7);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* 📚 الشريط الجانبي */
+.sidebar {
+    position: fixed;
+    right: -250px;
+    top: 0;
+    width: var(--sidebar-width);
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    padding-top: 60px;
+    transition: right 0.5s ease-in-out;
+    box-shadow: -5px 0 15px rgba(255, 215, 0, 0.5);
+    z-index: 1000;
+}
+
+.sidebar.open-sidebar {
+    right: 0;
+}
+
+.sidebar a {
+    padding: 12px 20px;
+    display: block;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+    font-weight: bold;
+    border-right: 3px solid transparent;
+}
+
+.sidebar a:hover {
+    background: rgba(255, 215, 0, 0.2);
+    padding-right: 30px;
+    border-right: 3px solid var(--gold-color);
+}
+
+/* 🔘 زر القائمة */
+.toggle-btn {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    background: var(--btn-bg);
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 1100;
+    border: none;
+    color: #000;
+    font-size: 18px;
+}
+
+.toggle-btn:hover {
+    transform: rotate(90deg);
+}
+
+/* 🆘 زر المساعدة */
+.help-btn {
+    background: var(--btn-bg);
+    color: #000;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.help-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(210, 180, 140, 0.8);
+}
+
+/* 💭 الإشعار */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--btn-bg);
+    color: #000;
+    padding: 15px 25px;
+    border-radius: 5px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1200;
+    font-weight: bold;
+}
+
+.notification.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* 🌙 الخلفية الشفافة عند فتح القائمة */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 📱 تجاوب مع الجوال */
+@media (max-width: 768px) {
+    body.sidebar-open {
+        margin-right: 0;
+    }
+    .sidebar {
+        width: 80%;
+        right: -80%;
+    }
+    .cards {
+        flex-direction: column;
+        align-items: center;
+    }
+    .card {
+        width: 90%;
+    }
+    .toggle-btn {
+        right: 10px;
+        top: 10px;
+    }
+}
